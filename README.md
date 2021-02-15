@@ -52,7 +52,12 @@ java -Xmx300G -jar /data/jmsutton/anaconda3/share/pilon-1.23-0/pilon-1.23.jar --
 
 ###BUSCO Analysis
 
-###Generating Blob plots 
+###SIDR
 
+###Jellyfish
+
+###GenomeScope2
+
+###Generating Blob plots 
 
 ###Filtering Genomes with Whitelist from Blobtools 
