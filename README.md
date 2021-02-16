@@ -55,8 +55,7 @@ java -Xmx300G -jar /data/jmsutton/anaconda3/share/pilon-1.23-0/pilon-1.23.jar --
 ###SIDR
 
 ###Jellyfish
-
-###GenomeScope2
+jellyfish count -m 21 -s 8G -t 10 -C -o 21mer /Path/To/Reads/reads.fasta
 
 ###Generating Blob plots 
 
