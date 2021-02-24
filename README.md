@@ -75,7 +75,30 @@ https://github.com/damurdock/SIDR
 # Jellyfish
 jellyfish count -m 21 -s 8G -t 10 -C -o 21mer /Path/To/Reads/reads.fasta
 
-# Generating Blob plots 
+# Blobtoolkit
+## Create Blob Directory
+
+/path/to/blobtoolkit/blobtools2/blobtools create --fasta /path/to/genome.fasta --taxdump /path/to/blobtoolkit/taxdump AssemblyName
+
+## Run blastn
+
+/path/to/blastn -db nt -query genome.fasta -outfmt '6 qseqid staxids bitscore std'  -max_target_seqs 10 -max_hsps 1 -evalue 1e-25 -num_threads 16 -out blast.out
+
+## Run blastx
+
+/path/to/diamond blastx --query genome.fasta --db reference_proteomes.fasta.gz --outfmt 6 qseqid staxids bitscore qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore --sensitive --max-target-seqs 1 --evalue 1e-25 --threads 16 > diamond.out
+
+## Map Illumina reads 
+
+minimap2 -ax map-ont -t 16 genome.fasta /path/to/raw/reads/reads.fastq | samtools sort -@16 -O BAM -o assembly.reads.bam 
+
+## Add all data files to Blob Directory
+
+path/to/blobtools2/blobtools add --hits blast.out --hits diamond.out --taxrule bestsumorder --taxdump ~/taxdump --cov assembly.reads.bam --busco /path/to/busco/run/full_table.tsv AssemblyName
+
+## Open BlobToolKit Viewer to view BlobPlot
+
+path/to/blobtools2/blobtools host /path/to/working/blob/info/directory
 
 # Filtering Genomes with Whitelist
 
