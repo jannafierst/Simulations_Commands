@@ -1,5 +1,5 @@
-### Simulations_Commands
-###commands used for various analyses used for Sim paper 
+# Simulations_Commands
+### commands used for various analyses used for Sim paper 
 
 ###ART Commands
 
