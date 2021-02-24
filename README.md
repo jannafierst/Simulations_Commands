@@ -77,8 +77,7 @@ busco -c 12 -m genome -i /data/jmsutton/simulations/celegans/1M/1M.contigs.fasta
 https://github.com/damurdock/SIDR
 
 ###Jellyfish
-
-###GenomeScope2
+jellyfish count -m 21 -s 8G -t 10 -C -o 21mer /Path/To/Reads/reads.fasta
 
 ###Generating Blob plots 
 
