@@ -79,7 +79,7 @@ jellyfish count -m 21 -s 8G -t 10 -C -o 21mer /Path/To/Reads/reads.fasta
 
 # Filtering Genomes with Whitelist
 
-# awk to split .fasta 
+## awk to split .fasta 
 
 #!/bin/bash
 
@@ -89,6 +89,6 @@ cat scaffolds_to_keep.txt | while read line; do cat "scaffold_"$line".fasta" ; d
 
 rm "scaffold"*".fasta"
 
-# checking the output
+## checking the output
 
 cat kept_scaffolds.fasta | grep '^>' | tr -d '\>scaffold\_' | sort -n | diff - scaffolds_to_keep.txt 
