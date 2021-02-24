@@ -6,7 +6,7 @@
 ###NanoSim commands
 
 # Subsampling Illumina data (fixed number of reads)
-#-s100 is the seed this MUST BE THE SAME for both commands for the reads to match
+-s100 is the seed this MUST BE THE SAME for both commands for the reads to match
 
 seqtk sample -s100 read1.fq 10000 > sub1.fq
 seqtk sample -s100 read2.fq 10000 > sub2.fq
