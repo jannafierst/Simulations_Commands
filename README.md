@@ -50,9 +50,31 @@ java -Xmx300G -jar /data/jmsutton/anaconda3/share/pilon-1.23-0/pilon-1.23.jar --
 
 ###Quast Analysis
 
+# Running Quast without a reference
+
+python /data/jdmillwood/anaconda3/pkgs/quast-5.0.2/quast.py -t 12 --plots-format pdf  /data/jmsutton/356/356_flye/assembly.fasta -o ./flye
+
+# Running Quast with a reference
+
+python /data/jdmillwood/anaconda3/pkgs/quast-5.0.2/quast.py -t 12 --plots-format pdf -r Caenorhabditis_elegans.WBcel235.dna.toplevel.fa /data/jmsutton/simulations/celegans/2M/2M.contigs.fasta -o ./2M
+
 ###BUSCO Analysis
 
+# A script to run BUSCO with the nematoda_odb10 dataset
+
+#!/bin/bash
+
+export PATH="/data/jlfierst/anaconda3/bin:$PATH"
+#export PATH="/data/jlfierst/anaconda3/:$PATH"
+export AUGUSTUS_CONFIG_PATH="/data/jlfierst/anaconda3/config/"
+
+export BUSCO_CONFIG_FILE="/data/jlfierst/anaconda3/config/config.ini"
+
+busco -c 12 -m genome -i /data/jmsutton/simulations/celegans/1M/1M.contigs.fasta -o 1M --lineage_dataset nematoda_odb10 
+
 ###SIDR
+
+https://github.com/damurdock/SIDR
 
 ###Jellyfish
 
@@ -60,4 +82,18 @@ java -Xmx300G -jar /data/jmsutton/anaconda3/share/pilon-1.23-0/pilon-1.23.jar --
 
 ###Generating Blob plots 
 
-###Filtering Genomes with Whitelist from Blobtools 
+###Filtering Genomes with Whitelist
+
+# awk to split .fasta 
+
+#!/bin/bash
+
+awk '/^>scaffold/ {OUT=substr($0,2) ".fasta"}; OUT {print >OUT}' final.assembly.fasta
+
+cat scaffolds_to_keep.txt | while read line; do cat "scaffold_"$line".fasta" ; done > kept_scaffolds.fasta
+
+rm "scaffold"*".fasta"
+
+# checking the output
+
+cat kept_scaffolds.fasta | grep '^>' | tr -d '\>scaffold\_' | sort -n | diff - scaffolds_to_keep.txt 
