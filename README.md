@@ -71,7 +71,6 @@ python /data/jdmillwood/anaconda3/pkgs/quast-5.0.2/quast.py -t 12 --plots-format
 #!/bin/bash
 
 export PATH="/data/jlfierst/anaconda3/bin:$PATH"
-#export PATH="/data/jlfierst/anaconda3/:$PATH"
 export AUGUSTUS_CONFIG_PATH="/data/jlfierst/anaconda3/config/"
 
 export BUSCO_CONFIG_FILE="/data/jlfierst/anaconda3/config/config.ini"
@@ -86,10 +85,35 @@ https://github.com/damurdock/SIDR
 jellyfish count -m 21 -s 8G -t 10 -C -o 21mer /Path/To/Reads/reads.fasta
 
 ###Generating Blob plots 
+=======
+# Blobtoolkit
+### Create Blob Directory
+
+/path/to/blobtoolkit/blobtools2/blobtools create --fasta /path/to/genome.fasta --taxdump /path/to/blobtoolkit/taxdump AssemblyName
+
+### Run blastn
+
+/path/to/blastn -db nt -query genome.fasta -outfmt '6 qseqid staxids bitscore std'  -max_target_seqs 10 -max_hsps 1 -evalue 1e-25 -num_threads 16 -out blast.out
+
+### Run blastx
+
+/path/to/diamond blastx --query genome.fasta --db reference_proteomes.fasta.gz --outfmt 6 qseqid staxids bitscore qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore --sensitive --max-target-seqs 1 --evalue 1e-25 --threads 16 > diamond.out
+
+### Map Illumina reads 
+
+minimap2 -ax map-ont -t 16 genome.fasta /path/to/raw/reads/reads.fastq | samtools sort -@16 -O BAM -o assembly.reads.bam 
+
+### Add all data files to Blob Directory
+
+path/to/blobtools2/blobtools add --hits blast.out --hits diamond.out --taxrule bestsumorder --taxdump ~/taxdump --cov assembly.reads.bam --busco /path/to/busco/run/full_table.tsv AssemblyName
+
+### Open BlobToolKit Viewer to view BlobPlot
+
+path/to/blobtools2/blobtools host /path/to/working/blob/info/directory
 
 ###Filtering Genomes with Whitelist
 
-# awk to split .fasta 
+## awk to split .fasta 
 
 #!/bin/bash
 
@@ -99,6 +123,6 @@ cat scaffolds_to_keep.txt | while read line; do cat "scaffold_"$line".fasta" ; d
 
 rm "scaffold"*".fasta"
 
-# checking the output
+## checking the output
 
 cat kept_scaffolds.fasta | grep '^>' | tr -d '\>scaffold\_' | sort -n | diff - scaffolds_to_keep.txt 
